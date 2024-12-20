@@ -1,11 +1,13 @@
-FROM python:3.10-slim
+FROM python:3.12-alpine
 
-WORKDIR /app
+RUN mkdir /src && mkdir /src/django-app
+WORKDIR /src
 
-COPY . /app/
+COPY . /src/
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apk update && apk add python3-dev
+
+RUN pip3 install -r requirements.txt
+CMD ["python", "django-app/manage.py", "runserver", "0.0.0.0:8000"]
 
 EXPOSE 8000
-
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
